@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const authRoutes = require('./routes/auth');
 const verifyToken = require('./middleware/authMiddleware');  // Import token verification middleware
+const verifyAdmin = require('./middleware/verifyAdmin');
+const adminRoutes = require('./routes/adminRoutes');
 
 dotenv.config();
 
@@ -21,5 +23,8 @@ app.use('/api/auth', authRoutes);  // Register and login routes
 app.get('/protected', verifyToken, (req, res) => {
     res.json({ message: 'This is a protected route' });
 });
+
+// Middleware and other routes here...
+app.use('/admin', adminRoutes);
 
 module.exports = app;
