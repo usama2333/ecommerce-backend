@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: Number, default: roles.USER, enum: [roles.USER, roles.ADMIN, roles.SUPER_ADMIN] }, // default to USER
+    deleted: { type: Boolean, default: false },
 }, { timestamps: true });
 
 // Password hashing before saving
