@@ -6,6 +6,8 @@ const { roles } = require('../models/user');
 exports.registerUser = async (req, res) => {
     try {
         const { name, email, password, role } = req.body;
+        console.log('Entered Email:', email);
+console.log('Entered Password:', password);
 
         // Default role to 'USER' if not provided
         const userRole = role !== undefined ? role : roles.USER;
@@ -25,15 +27,25 @@ exports.registerUser = async (req, res) => {
 exports.loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = await User.findOne({ email });
 
-        if (!user || !(await bcrypt.compare(password, user.password))) {
-            return res.status(401).json({ error: 'Invalid email or password' });
+        // Check if user exists
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
         }
 
-        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.json({ token });
+        // Compare entered password with hashed password
+        const isMatch = await bcrypt.compare(password, user.password);
+        
+        if (!isMatch) {
+            return res.status(400).json({ error: 'Invalid email... or password' });
+        }
+
+        // Proceed with login (JWT token generation, etc.)
+        res.status(200).json({ message: 'Login successful' });
+
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        console.error('Login error: ', err);
+        res.status(500).json({ error: 'Error during login' });
     }
 };

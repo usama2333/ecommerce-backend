@@ -14,6 +14,8 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true },
     role: { type: Number, default: roles.USER, enum: [roles.USER, roles.ADMIN, roles.SUPER_ADMIN] }, // default to USER
     deleted: { type: Boolean, default: false },
+    resetToken: { type: String, default: null },
+    resetTokenExpiry: { type: Date, default: null },
 }, { timestamps: true });
 
 // Password hashing before saving
