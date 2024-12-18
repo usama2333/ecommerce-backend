@@ -84,11 +84,6 @@ exports.resetPassword = async (req, res) => {
     }
 };
 
-
-
-
-
-
 // Update Password
 exports.updatePassword = async (req, res) => {
     try {
